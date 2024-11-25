@@ -1,0 +1,80 @@
+package tiDo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Store {
+    private List<DigitalVideoDisc> listOfDVDs;
+
+    public Store() {
+        this.listOfDVDs = new ArrayList<>();
+    }
+
+    public void displayListOfDVDs() {
+        if (listOfDVDs.isEmpty()) {
+            System.out.println("No DVDs available in the store.");
+        } else {
+            for (DigitalVideoDisc dvd : listOfDVDs) {
+                dvd.display();
+            }
+        }
+    }
+
+    public DigitalVideoDisc[] searchByTitle(String title) {
+        List<DigitalVideoDisc> result = new ArrayList<>();
+        for (DigitalVideoDisc dvd : listOfDVDs) {
+            if (dvd.getTitle().equalsIgnoreCase(title)) {
+                result.add(dvd);
+            }
+        }
+        return result.toArray(new DigitalVideoDisc[0]);
+    }
+
+    public DigitalVideoDisc[] searchByCategory(String category) {
+        List<DigitalVideoDisc> result = new ArrayList<>();
+        for (DigitalVideoDisc dvd : listOfDVDs) {
+            if (dvd.getCategory().equalsIgnoreCase(category)) {
+                result.add(dvd);
+            }
+        }
+        return result.toArray(new DigitalVideoDisc[0]);
+    }
+
+    public DigitalVideoDisc[] searchByPrice(float price) {
+        List<DigitalVideoDisc> result = new ArrayList<>();
+        for (DigitalVideoDisc dvd : listOfDVDs) {
+            if (dvd.getPrice() <= price) {
+                result.add(dvd);
+            }
+        }
+        return result.toArray(new DigitalVideoDisc[0]);
+    }
+
+    public void viewDetailOfDVD(DigitalVideoDisc DVD) {
+        DVD.display();
+    }
+
+    public boolean removeDVD(String id) {
+        for (DigitalVideoDisc dvd : listOfDVDs) {
+            if (dvd.getId().equalsIgnoreCase(id)) {
+                listOfDVDs.remove(dvd);
+                return true; 
+            }
+        }
+        return false; 
+    }
+    
+    public boolean addNewDVDs(DigitalVideoDisc dvd) {
+    	listOfDVDs.add(newDVD);
+    	return true
+    }
+    
+    public boolean addNewDVDs(boolean loginCondition, String id, String title, String category, int price) {
+        if (loginCondition) {
+            DigitalVideoDisc newDVD = new DigitalVideoDisc(id, title, category, price);
+            listOfDVDs.add(newDVD);
+            return true;
+        }
+        return false;
+    }
+}

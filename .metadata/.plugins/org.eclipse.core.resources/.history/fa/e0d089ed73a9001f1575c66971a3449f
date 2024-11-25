@@ -1,0 +1,187 @@
+package tiDo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+
+public class Cart {
+    private Map<DigitalVideoDisc, Integer> listOfDVDs; 
+
+    public Cart() {
+        this.listOfDVDs = new HashMap<>(); 
+    }
+
+    public boolean addDVDToCart(DigitalVideoDisc DVD) {
+        if (listOfDVDs.containsKey(DVD)) {
+            listOfDVDs.put(DVD, listOfDVDs.get(DVD) + 1);
+        } else {
+            listOfDVDs.put(DVD, 1);
+        }
+        return true; 
+    }
+    
+    
+    // --------------------------------------------------------
+    // 2.1 Overloading by differing types of parameter 
+    public boolean addDVDToCart(DigitalVideoDisc [] dvdList) {
+    	for (int i = 0; i < dvdList.length; i++) {
+    		addDVDToCart(dvdList[i]);
+    	}
+    	return true;
+    }
+    // --------------------------------------------------------
+    
+    // --------------------------------------------------------
+    // 2.2. Overloading by differing the number of parameters 
+    public boolean addDVDToCart(DigitalVideoDisc dvd1,DigitalVideoDisc dvd2) {
+    	addDVDToCart(dvd1);
+    	addDVDToCart(dvd2);
+    	return true;
+    }
+    // --------------------------------------------------------
+    
+    public void displayCart() {
+    	System.out.println("******************************CART******************************");
+    	System.out.println("Ordered Items:");
+    	int index = 1;
+    	for (Map.Entry<DigitalVideoDisc, Integer> entry : listOfDVDs.entrySet()) {
+            DigitalVideoDisc currentDVD = entry.getKey();
+            int quantity = entry.getValue();
+            System.out.println(index + ". DVD - " + currentDVD.getTitle() + " - " + currentDVD.getCategory() + " - " + quantity + ": " + currentDVD.getPrice());
+        }
+        System.out.println("****************************************************************");
+    }
+
+    public void sortCartByTitle() {
+        List<DigitalVideoDisc> sortedDVDs = new ArrayList<>(listOfDVDs.keySet());
+        Collections.sort(sortedDVDs, Comparator.comparing(DigitalVideoDisc::getTitle));
+        
+        for (DigitalVideoDisc dvd : sortedDVDs) {
+            dvd.display();
+            System.out.println("Quantity: " + listOfDVDs.get(dvd)); 
+        }
+    }
+
+    public void sortCartByCost() {
+        List<DigitalVideoDisc> sortedDVDs = new ArrayList<>(listOfDVDs.keySet());
+        Collections.sort(sortedDVDs, Comparator.comparing(DigitalVideoDisc::getPrice));
+
+        for (DigitalVideoDisc dvd : sortedDVDs) {
+            dvd.display();
+            System.out.println("Quantity: " + listOfDVDs.get(dvd)); 
+        }
+    }
+    
+    public boolean updateQuantity(DigitalVideoDisc DVD, int numQuanChange) {
+        if (listOfDVDs.containsKey(DVD)) {
+            int currentQuantity = listOfDVDs.get(DVD);
+            int newQuantity = currentQuantity + numQuanChange;
+            
+            if (newQuantity < 0) {
+                return false; 
+            }
+            
+            if (newQuantity == 0) {
+                listOfDVDs.remove(DVD);
+            } else {
+                listOfDVDs.put(DVD, newQuantity);
+            }
+            return true; 
+        }
+        return false; 
+    }
+    
+    public boolean removeDVD(DigitalVideoDisc DVD) {
+        if (listOfDVDs.containsKey(DVD)) {
+            listOfDVDs.remove(DVD); 
+            return true; 
+        }
+        return false; 
+    }
+    
+    public DigitalVideoDisc randomPickDVDForFree() {
+        List<DigitalVideoDisc> availableDVDs = new ArrayList<>(listOfDVDs.keySet());
+        if (availableDVDs.isEmpty()) {
+            return null; 
+        }
+        Random random = new Random();
+        return availableDVDs.get(random.nextInt(availableDVDs.size())); 
+    }
+    
+    public void filterDVDByID(String id) {
+        for (Map.Entry<DigitalVideoDisc, Integer> entry : listOfDVDs.entrySet()) {
+            DigitalVideoDisc currentDVD = entry.getKey();
+            if (currentDVD.getId().equals(id)) {
+                currentDVD.display(); 
+                System.out.println("Quantity: " + entry.getValue()); 
+            }
+        }
+    }
+
+    public void filterDVDByTitle(String title) {
+        for (Map.Entry<DigitalVideoDisc, Integer> entry : listOfDVDs.entrySet()) {
+            DigitalVideoDisc currentDVD = entry.getKey();
+            if (currentDVD.getTitle().equalsIgnoreCase(title)) {
+                currentDVD.display(); 
+                System.out.println("Quantity: " + entry.getValue()); 
+            }
+        }
+    }
+    
+    public Transaction placeOrder() {
+        Scanner scanner = new Scanner(System.in);
+        List<DigitalVideoDisc> cart = new ArrayList<>();
+
+        for (Map.Entry<DigitalVideoDisc, Integer> entry : listOfDVDs.entrySet()) {
+            DigitalVideoDisc dvd = entry.getKey();
+            Integer quantity = entry.getValue();
+            
+            // Add the DVD 'quantity' times to the cart
+            for (int i = 0; i < quantity; i++) {
+                cart.add(dvd);
+            }
+        }
+
+        String deliveryInformation, deliveryInstructions;
+        float totalCost = 0;
+
+        System.out.print("Enter delivery information: ");
+        deliveryInformation = scanner.nextLine();
+        System.out.print("Enter delivery instructions: ");
+        deliveryInstructions = scanner.nextLine();
+
+        for (DigitalVideoDisc dvd : cart) {
+            totalCost += dvd.getPrice();
+        }
+
+        float totalCostAfterVAT = totalCost * 1.1f; // 10% VAT
+        float finalTotalCost = totalCostAfterVAT;
+
+        System.out.println("Invoice:");
+        for (DigitalVideoDisc dvd : cart) {
+            dvd.display();
+        }
+        System.out.println("Total Cost Before VAT: " + totalCost);
+        System.out.println("Total Cost After VAT: " + totalCostAfterVAT);
+        System.out.println("Final Total Cost: " + finalTotalCost);
+
+        System.out.print("Enter card owner's name: ");
+        String cardOwner = scanner.nextLine();
+        int transactionAmount = (int) finalTotalCost; 
+        String transactionMessage = "deliveryInformation: " + deliveryInformation + "\ndeliveryInstructions: " + deliveryInstructions;
+        int balance = 1000; // Example balance
+        String transactionDate = "2024-10-27"; // Example date
+
+        Transaction transaction = new Transaction("TX123456", cardOwner, transactionAmount, transactionMessage, balance, transactionDate);
+        transaction.display();
+
+        System.out.println("\nOrder and transaction details have been sent to the customer's email.");
+        return transaction;
+    }
+
+}

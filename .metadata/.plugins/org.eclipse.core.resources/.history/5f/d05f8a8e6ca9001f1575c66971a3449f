@@ -1,0 +1,37 @@
+package tiDo;
+
+
+public class TestPassingParameter {
+    public static void main(String[] args){
+        DigitalVideoDisc jungleDVD = new DigitalVideoDisc("absxc1", "Jungle", "Advanture", 100000);
+        DigitalVideoDisc cinderellaDVD = new DigitalVideoDisc("absxc2", "Cinderella", "Advanture", 100000);
+
+        swap(jungleDVD, cinderellaDVD);
+
+        System.out.println("Jungle dvd title: " + jungleDVD.getTitle());
+        System.out.println("Cinderella dvd title: " + cinderellaDVD.getTitle());
+
+        changeTitle(jungleDVD, cinderellaDVD.getTitle());
+        System.out.println("Jungle dvd title: " + jungleDVD.getTitle());
+    }
+
+    public static void swap(DigitalVideoDisc dvd1, DigitalVideoDisc dvd2) {
+        DigitalVideoDisc tmp = new DigitalVideoDisc(dvd1.getTitle(), dvd1.getCategory(), dvd1.getDirector(), dvd1.getLength(), dvd1.getCost());
+
+        dvd1.setId(dvd2.getId());
+        dvd1.setTitle(dvd2.getTitle());
+        dvd1.setCategory(dvd2.getCategory());
+        dvd1.setPrice(dvd2.getPrice());
+
+        dvd2.setTitle(tmp.getTitle());
+        dvd2.setCategory(tmp.getCategory());
+        dvd2.setDirector(tmp.getDirector());
+        dvd2.setLength(tmp.getLength());
+        dvd2.setCost(tmp.getCost());
+    }
+    public static void changeTitle(DigitalVideoDisc dvd, String title){
+        String oldTitle = dvd.getTitle();
+        dvd.setTitle(title);
+        dvd = new DigitalVideoDisc(oldTitle);
+    }
+}

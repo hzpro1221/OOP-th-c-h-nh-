@@ -1,0 +1,6 @@
+package tiDo;
+
+public class Snippet {
+	Please write a swap() method that can correctly swap the two objects.
+}
+

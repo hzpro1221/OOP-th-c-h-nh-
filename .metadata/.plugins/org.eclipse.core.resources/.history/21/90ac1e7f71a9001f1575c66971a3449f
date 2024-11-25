@@ -1,0 +1,23 @@
+package tiDo;
+
+public class TestStore {
+    public static void main(String[] args) {
+        Store store = new Store();
+        DigitalVideoDisc dvd1 = new DigitalVideoDisc("Roger Allers", "The Lion King", "Animation",970000);
+        DigitalVideoDisc dvd2 = new DigitalVideoDisc("Geogre Lucas", "Star wars", "Science Fiction", 100000);
+        cart.addDVDToCart(dvd2);
+        DigitalVideoDisc dvd3 = new DigitalVideoDisc("KhaiDepTrai", "Aladin","Animation", 200000);
+        cart.addDVDToCart(dvd3);
+        store.addDVD(dvd1);
+        store.addDVD(dvd2);
+        store.addDVD(dvd3);
+
+        System.out.println(store.toString());
+
+        store.removeDVD(dvd1);
+        store.removeDVD(dvd2);
+        store.removeDVD(dvd3);
+
+        System.out.println(store.toString());
+    }
+}
